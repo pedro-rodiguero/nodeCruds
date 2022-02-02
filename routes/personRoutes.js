@@ -28,4 +28,37 @@ router.post('/', async (req, res) => {
         res.status(500).json({error: error})
     }
 })
+
+
+// Read - leitura de dados
+router.get('/', async (req, res) => {
+    try {
+        // lendo dados
+        const people = await Person.find()
+
+        res.status(200).json(people)
+    } catch (error) {
+        res.status(500).json({error: error})
+    }
+})
+
+router.get('/:id', async (req, res) => {
+
+    //extrair o dado da requisicao, pela url = req.params
+    const id = req.params.id
+
+    try {
+        const person = await Person.findOne({ _id: id })
+
+        if(!person) {
+            res.status(422).json({message: 'O usuario nao foi encontrado!!'})
+            return
+        }
+
+        res.status(200).json(person)
+    } catch (error) {
+        res.status(500).json({error: error})
+    }
+})
+
 module.exports = router
